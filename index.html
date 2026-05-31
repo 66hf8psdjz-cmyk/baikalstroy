@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>БайкалСтрой | Строительство домов под ключ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* цвета */
+        :root {
+            --dark-bg: #0a0a0a;
+            --card-bg: #151515;
+            --accent: #e67e22;
+            --accent-dark: #b85e0a;
+            --gray: #aaa;
+            --light: #f5f5f5;
+        }
+
+        /* анимация появления */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* скролл */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(230, 126, 34, 0.3);
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #ddd;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        .menu-btn {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--accent);
+        }
+
+        /* hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 80px;
+        }
+        .hero-content {
+            max-width: 700px;
+        }
+        .hero-badge {
+            color: var(--accent);
+            letter-spacing: 3px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero h1 span {
+            color: var(--accent);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin: 1.5rem 0;
+            color: #ccc;
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #0f0f0f;
+        }
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: scale(1.02);
+        }
+        .btn-outline {
+            border: 2px solid var(--accent);
+            color: white;
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: rgba(230,126,34,0.2);
+            transform: scale(1.02);
+        }
+
+        /* общие секции */
+        section {
+            padding: 90px 0;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .section-sub {
+            color: #aaa;
+            margin-bottom: 50px;
+            max-width: 600px;
+        }
+
+        /* услуги */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .service-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px 24px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid #2a2a2a;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 30px -15px rgba(230,126,34,0.3);
+        }
+        .service-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+
+        /* о компании */
+        .about-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            align-items: center;
+        }
+        .about-text {
+            flex: 1;
+        }
+        .about-text p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .about-img {
+            flex: 1;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: 0.4s;
+        }
+        .about-img:hover img {
+            transform: scale(1.02);
+        }
+
+        /* портфолио */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .portfolio-item {
+            background: var(--card-bg);
+            border-radius: 28px;
+            overflow: hidden;
+            transition: 0.3s;
+            border: 1px solid #2a2a2a;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+        }
+        .portfolio-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+        }
+        .portfolio-info {
+            padding: 20px;
+        }
+        .portfolio-info h3 {
+            margin-bottom: 8px;
+        }
+
+        /* контакты */
+        .contacts {
+            background: linear-gradient(145deg, #111, #050505);
+            border-radius: 48px;
+            padding: 50px 40px;
+        }
+        .contacts-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            align-items: center;
+        }
+        .contact-info {
+            flex: 1;
+        }
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .contact-detail i {
+            font-size: 1.8rem;
+            color: var(--accent);
+            width: 40px;
+        }
+        .social-links {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .social-links a {
+            color: white;
+            font-size: 2rem;
+            transition: 0.2s;
+        }
+        .social-links a:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+        .contact-form {
+            flex: 1;
+            background: #0e0e0e;
+            padding: 30px;
+            border-radius: 32px;
+            border: 1px solid #2a2a2a;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: #1c1c1c;
+            border: 1px solid #333;
+            border-radius: 28px;
+            color: white;
+            outline: none;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+        .submit-btn {
+            background: var(--accent);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #222;
+            color: #777;
+        }
+
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.5rem; }
+            .menu-btn { display: block; }
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 70%;
+                background: #0a0a0a;
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 0;
+                transition: 0.3s;
+                border-right: 2px solid var(--accent);
+            }
+            .nav-links.open { left: 0; }
+            .about-grid { flex-direction: column; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="header-inner">
+            <div class="logo">
+                <h1>БайкалСтрой</h1>
+                <p>СТРОИМ НАДЁЖНО</p>
+            </div>
+            <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#services">Услуги</a></li>
+                <li><a href="#portfolio">Проекты</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content fade-up">
+                <span class="hero-badge">✦ 15 ЛЕТ НА РЫНКЕ ✦</span>
+                <h1>Строим дом <span>вашей мечты</span> под ключ</h1>
+                <p>Индивидуальные проекты, авторский надзор, гарантия качества. Построим дом, который будет радовать поколения.</p>
+                <div class="btn-group">
+                    <a href="#contacts" class="btn btn-primary"><i class="fas fa-calculator"></i> Рассчитать стоимость</a>
+                    <a href="#portfolio" class="btn btn-outline"><i class="fas fa-images"></i> Наши работы</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="fade-up">
+                <h2 class="section-title">О компании</h2>
+                <p class="section-sub">БайкалСтрой — команда профессионалов, которая ценит качество и время клиента.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-text fade-up">
+                    <p>Мы строим дома и коттеджи из кирпича, газобетона, дерева по всей Иркутской области и за её пределами. Используем только проверенные материалы и современные технологии. Каждый объект — под личным контролем прораба.</p>
+                    <p>За 15 лет сдали более 220 объектов. Предоставляем гарантию на все виды работ до 5 лет. Поможем с проектированием, подбором участка и ипотекой.</p>
+                    <p><strong>✔️ Полная документация</strong><br><strong>✔️ Фиксированная смета</strong><br><strong>✔️ Поэтапная оплата</strong></p>
+                </div>
+                <div class="about-img fade-up">
+                    <img src="images/about.jpg" alt="Строительная бригада" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" style="background: #0b0b0b;">
+        <div class="container">
+            <div class="fade-up">
+                <h2 class="section-title">Наши услуги</h2>
+                <p class="section-sub">Полный цикл строительства – от эскиза до вручения ключей</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-up">
+                    <div class="service-icon"><i class="fas fa-home"></i></div>
+                    <h3>Строительство домов</h3>
+                    <p>Кирпич, газобетон, брус, каркас. По типовым или индивидуальным проектам под ключ.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><i class="fas fa-drafting-compass"></i></div>
+                    <h3>Проектирование</h3>
+                    <p>Разработка архитектурных и конструктивных решений, 3D-визуализация.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><i class="fas fa-brush"></i></div>
+                    <h3>Отделка и ремонт</h3>
+                    <p>Черновая и чистовая отделка, фасадные работы, ландшафтный дизайн.</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="service-icon"><i class="fas fa-hard-hat"></i></div>
+                    <h3>Авторский надзор</h3>
+                    <p>Контроль качества на всех этапах, соблюдение сроков и технологий.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="container">
+            <div class="fade-up">
+                <h2 class="section-title">Реализованные проекты</h2>
+                <p class="section-sub">Каждый дом — уникален. Посмотрите наши последние работы.</p>
+            </div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item fade-up">
+                    <img class="portfolio-img" src="images/portfolio-1.jpg" alt="Коттедж в сосновом бору" loading="lazy">
+                    <div class="portfolio-info">
+                        <h3>Коттедж «Сосновый»</h3>
+                        <p>320 м², газобетон + облицовочный кирпич, 2025 г.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item fade-up">
+                    <img class="portfolio-img" src="images/portfolio-2.jpg" alt="Дом в скандинавском стиле" loading="lazy">
+                    <div class="portfolio-info">
+                        <h3>Скандинавский стиль</h3>
+                        <p>180 м², каркас, панорамные окна, 2024 г.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item fade-up">
+                    <img class="portfolio-img" src="images/portfolio-3.jpg" alt="Особняк из кирпича" loading="lazy">
+                    <div class="portfolio-info">
+                        <h3>Особняк «Престиж»</h3>
+                        <p>450 м², кирпич, натуральный камень, 2025 г.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacts">
+        <div class="container">
+            <div class="contacts fade-up">
+                <div class="contacts-flex">
+                    <div class="contact-info">
+                        <h3>Свяжитесь с нами</h3>
+                        <div class="contact-detail"><i class="fas fa-phone-alt"></i> <span>+7 (3952) 77-88-99</span></div>
+                        <div class="contact-detail"><i class="fab fa-whatsapp"></i> <span>+7 (914) 123-45-67</span></div>
+                        <div class="contact-detail"><i class="fas fa-envelope"></i> <span>info@baikalstroy.ru</span></div>
+                        <div class="contact-detail"><i class="fas fa-map-marker-alt"></i> <span>Иркутск, ул. Строителей, 15</span></div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-telegram"></i></a>
+                            <a href="#"><i class="fab fa-whatsapp"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h3 style="margin-bottom: 25px;">Оставьте заявку</h3>
+                        <form id="leadForm">
+                            <div class="input-group"><input type="text" placeholder="Ваше имя" required></div>
+                            <div class="input-group"><input type="tel" placeholder="Телефон" required></div>
+                            <div class="input-group"><textarea rows="3" placeholder="Пожелания по объекту"></textarea></div>
+                            <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Отправить</button>
+                        </form>
+                        <p style="font-size: 12px; margin-top: 15px;">Мы перезвоним в течение 15 минут</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <p>© 2026 БайкалСтрой — строим надёжные дома. Все права защищены.</p>
+    </div>
+</footer>
+
+<script>
+    const fadeElements = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    fadeElements.forEach(el => observer.observe(el));
+
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    const form = document.getElementById('leadForm');
+    if(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Спасибо! Менеджер свяжется с вами для уточнения деталей.');
+            form.reset();
+        });
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if(href === "#" || href === "") return;
+            const target = document.querySelector(href);
+            if(target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+</body>
+</html>
